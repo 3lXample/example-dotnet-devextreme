@@ -1,0 +1,102 @@
+<section>
+  <h2>Data Grid - Data Binding</h2>
+  <div class="row">
+    <div class="col-md-3">
+      <ul class="nav nav-pills nav-stacked" role="tablist">
+        <li role="presentation" class="active"><a href="#simple-array" aria-controls="simple-array" role="tab" data-toggle="pill">Simple Array</a></li>
+        <li role="presentation"><a href="#ajax-request" aria-controls="ajax-request" role="tab" data-toggle="pill">Ajax Request</a></li>
+        <li role="presentation"><a href="#odata-service" aria-controls="odata-service" role="tab" data-toggle="pill">OData Service</a></li>
+        <li role="presentation"><a href="#web-api-service" aria-controls="web-api-service" role="tab" data-toggle="pill">Web API Service</a></li>
+        <li role="presentation"><a href="#signalr-service" aria-controls="signalr-service" role="tab" data-toggle="pill">SignalR Service</a></li>
+      </ul>
+    </div>
+    <div class="col-md-9">
+      <div class="tab-content well well-sm">
+        <div role="tabpanel" class="tab-pane active" id="simple-array">
+          <h3 class="text-center">Simple Array</h3>
+          @(Html.DevExtreme().DataGrid()
+            .ID("gridContainerSimpleArray")
+            .ShowBorders(true)
+            .DataSource(new JS("customers"))
+            .Columns(c => {
+              c.Add().DataField("FirstName");
+              c.Add().DataField("LastName");
+              c.Add().DataField("Gender");
+              c.Add().DataField("CompanyName");
+              c.Add().DataField("JobTitle");
+            })
+          )
+        </div>
+        <div role="tabpanel" class="tab-pane" id="ajax-request">
+          <h3 class="text-center">Ajax Request</h3>
+          @(Html.DevExtreme().DataGrid()
+            .ID("gridContainerAjaxRequest")
+            .ShowBorders(true)
+            .DataSource(d => d.StaticJson().Url("~/data/customers.json").Key("ID"))
+            .Columns(c => {
+              c.Add().DataField("FirstName");
+              c.Add().DataField("LastName");
+              c.Add().DataField("Gender");
+              c.Add().DataField("CompanyName");
+              c.Add().DataField("JobTitle");
+            })
+          )
+        </div>
+        <div role="tabpanel" class="tab-pane" id="odata-service">
+          <h3 class="text-center">OData Service</h3>
+          @(Html.DevExtreme().DataGrid()
+            .ID("gridContainerODataService")
+            .ShowBorders(true)
+            .DataSource(d => d.StaticJson().Url("~/data/customers.json").Key("ID"))
+            .DataSource(d => d.OData().Url("https://js.devexpress.com/Demos/DevAV/odata/Products").Key("Product_ID"))
+            .DataSourceOptions(d => d.Select(new string[] {
+              "Product_ID",
+              "Product_Name",
+              "Product_Cost",
+              "Product_Sale_Price",
+              "Product_Retail_Price",
+              "Product_Current_Inventory",
+              "Product_Consumer_Rating",
+              "Product_Available"
+              }).Filter("['Product_Available']")
+            )
+            .Columns(c => {
+              c.Add().DataField("Product_ID");
+              c.Add().DataField("Product_Name");
+              c.Add()
+                .Caption("Cost")
+                .DataField("Product_Cost")
+                .DataType(GridColumnDataType.Number)
+                .Format(Format.Currency);
+              c.Add()
+                .Caption("Sale Price")
+                .DataField("Product_Sale_Price")
+                .DataType(GridColumnDataType.Number)
+                .Format(Format.Currency);
+              c.Add()
+                .Caption("Retail Price")
+                .DataField("Product_Retail_Price")
+                .DataType(GridColumnDataType.Number)
+                .Format(Format.Currency);
+              c.Add()
+                .Caption("Inventory")
+                .DataField("Product_Current_Inventory");
+              c.Add()
+                .Caption("Consumer Rating")
+                .DataField("Product_Consumer_Rating")
+                .DataType(GridColumnDataType.Number)
+                .Format(f => {
+                  f.Type(Format.FixedPoint);
+                  f.Precision(1);
+                });
+            })
+          )
+        </div>
+        <div role="tabpanel" class="tab-pane" id="web-api-service">Web API Service</div>
+        <div role="tabpanel" class="tab-pane" id="signalr-service">SignalR Service</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="~/data/customers.js"></script>
